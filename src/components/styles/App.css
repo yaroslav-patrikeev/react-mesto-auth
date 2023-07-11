@@ -1,0 +1,12 @@
+.app-header__right-element {
+  display: flex;
+  column-gap: 24px;
+}
+
+.app-header__email {
+  color: white;
+}
+
+.app-header__exit {
+  color: #a9a9a9;
+}

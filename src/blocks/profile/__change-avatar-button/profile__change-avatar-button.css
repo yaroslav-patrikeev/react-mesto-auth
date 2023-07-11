@@ -1,0 +1,18 @@
+.profile__change-avatar-button {
+    border-radius: 50%;
+    grid-area: photo;
+    position: relative;
+    cursor: pointer;
+}
+
+.profile__change-avatar-button:hover::before {
+    content: '';
+    background-image: url(../../../images/pen.svg);
+    width: 26px;
+    height: 26px;
+    position: absolute;
+    background-size: cover;
+    background-position: center;
+    top: 47px;
+    left: 47px;
+}

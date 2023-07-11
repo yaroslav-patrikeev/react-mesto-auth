@@ -1,0 +1,11 @@
+.popup__close_place_confirm {
+    top: calc(50% - 194px / 2 - 8px - 32px);
+    left: calc(50% + 430px / 2 + 8px);
+    }
+    
+@media (max-width: 767px) {
+    .popup__close_place_confirm {
+        top: calc(50% - 322px / 2 - 20px - 16px);
+        left: calc(50% + 282px / 2 - 20px);
+    }
+}

@@ -1,0 +1,17 @@
+.popup__close {
+  position: fixed;
+  background-image: url(../../../images/close-icon.svg);
+  width: 32px;
+  height: 32px;
+  background-size: cover;
+  cursor: pointer;
+  border: 0;
+  background-color: transparent;
+}
+
+@media (max-width: 767px) {
+  .popup__close {
+    width: 20px;
+    height: 20px;
+  }
+}

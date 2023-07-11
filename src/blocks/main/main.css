@@ -1,0 +1,18 @@
+.main {
+  width: 880px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+@media (max-width: 1023px) {
+  .main {
+    width: 581px;
+  }
+}
+
+@media (max-width: 767px) {
+  .main {
+    width: 282px;
+  }
+}

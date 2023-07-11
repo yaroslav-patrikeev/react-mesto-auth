@@ -1,0 +1,10 @@
+.popup__input_field_second {
+  margin-bottom: 35px;
+}
+
+@media (max-width: 767px) {
+  .popup__input_field_second {
+    margin-bottom: 25px;
+  }
+
+}

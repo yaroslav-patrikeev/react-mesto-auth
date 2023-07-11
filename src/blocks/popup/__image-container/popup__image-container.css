@@ -1,0 +1,11 @@
+.popup__image-container {
+  max-width: 75vw;
+  max-height: 75vh;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  display: flex;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+  cursor: default;
+}

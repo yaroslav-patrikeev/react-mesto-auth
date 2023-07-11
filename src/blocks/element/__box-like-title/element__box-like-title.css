@@ -1,0 +1,14 @@
+.element__box-like-title {
+  /* display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 241px;
+  margin: 25px 0 0 21px; */
+  display: grid;
+  grid-template-areas:
+    "title like"
+    "title like-counter";
+  max-width: 241px;
+  justify-content: space-between;
+  margin: 0 auto;
+}

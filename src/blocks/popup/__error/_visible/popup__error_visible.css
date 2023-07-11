@@ -1,0 +1,13 @@
+.popup__error_visible {
+    color: red;
+    visibility: visible;
+    font-size: 12px;
+    line-height: 14px;
+    margin-top: 5px;
+    display: block;
+    min-height: 30px;
+}
+
+.popup__error_visible:first-of-type {
+    margin-bottom: 10px;
+}

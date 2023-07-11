@@ -1,0 +1,61 @@
+.authorization-form {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  width: 358px;
+}
+
+@media (max-width: 768px) {
+  .authorization-form {
+    width: 260px;
+  }
+}
+
+.authorization-form__title {
+  color: white;
+  font-size: 24px;
+  margin: 0 0 50px 0;
+}
+
+@media (max-width: 768px) {
+  .authorization-form__title {
+    margin-bottom: 40px;
+  }
+}
+
+.authorization-form__input {
+  color: white;
+  background-color: black;
+  border: none;
+  border-bottom: 1px solid #ccc;
+  height: 27px;
+  margin-bottom: 30px;
+}
+
+.authorization-form__input::placeholder {
+  color: #ccc;
+}
+
+.authorization-form__button {
+  height: 50px;
+  margin-top: 186px;
+}
+
+@media (max-width: 768px) {
+  .authorization-form__button {
+    margin-top: 173px;
+  }
+}
+
+.authorization-form__return-link {
+  color: white;
+  margin-top: 15px;
+  font-size: 14px;
+  text-decoration: none;
+}
+
+@media (max-width: 768px) {
+  .authorization-form__return-link {
+    margin-top: 20px;
+  }
+}

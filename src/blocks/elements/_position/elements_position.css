@@ -1,0 +1,9 @@
+.elements_position {
+  margin: 50px 0 0;
+}
+
+@media (max-width: 1023px) {
+  .elements_position {
+    margin: 36px 0 48px;
+  }
+}

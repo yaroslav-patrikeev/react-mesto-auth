@@ -1,0 +1,25 @@
+.profile {
+  min-width: 100%;
+  min-height: 120px;
+  display: grid;
+  grid-template-columns: 120px auto 150px;
+  grid-template-rows: repeat(2, auto);
+  grid-template-areas:
+  "photo container add-button"
+  "photo status add-button";
+  gap: 7px 30px;
+}
+
+@media (max-width: 1023px) {
+  .profile {
+    grid-template-rows: repeat(4, auto);
+    grid-template-columns: auto;
+    grid-template-areas:
+    "photo"
+    "container"
+    "status"
+    "add-button";
+    gap: 0;
+    justify-items: center;
+  }
+}

@@ -1,0 +1,17 @@
+.profile__photo {
+  border-radius: 50%;
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  transition: 0.3s;
+}
+
+@media (max-width: 1023px) {
+  .profile__photo {
+    margin: 0 0 26px;
+  }
+}
+
+.profile__photo:hover {
+  opacity: 0.2;
+}

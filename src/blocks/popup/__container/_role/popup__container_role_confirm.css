@@ -1,0 +1,12 @@
+.popup__container_role_confirm {
+    top: calc(50% - 194px / 2);
+}
+
+@media (max-width: 767px) {
+    .popup__container_role_confirm {
+      width: 282px;
+      height: 194px;
+      top: calc(50% - 322px / 2);
+      left: calc(50% - 282px / 2);
+    }
+  }

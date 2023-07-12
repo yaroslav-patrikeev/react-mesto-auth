@@ -269,8 +269,6 @@ function App() {
             />
           }
         />
-
-        <Route path="/test" element={<InfoTooltip />} />
         <Route
           path="/sign-in"
           element={<Login setLoggedIn={setLoggedIn} setToken={setToken} />}

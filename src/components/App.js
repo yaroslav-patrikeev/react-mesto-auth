@@ -36,8 +36,16 @@ function App() {
   const [onSubmit, setOnSubmit] = React.useState(undefined);
   const navigate = useNavigate();
   const apiAuth = new ApiAuth();
+  const [isMobile, setIsMobile] = React.useState(false);
+  const [isMenu, setIsMenu] = React.useState(false);
 
   React.useEffect(() => {
+    window.addEventListener("resize", () => {
+      if (window.innerWidth < 768) return setIsMobile(true);
+      setIsMenu(false);
+      setIsMobile(false);
+    });
+
     api
       .getUserInfo()
       .then((res) => setCurrentUser(res))
@@ -59,6 +67,8 @@ function App() {
       })
       .catch(console.error);
   }, [token]);
+
+  React.useEffect(() => {});
 
   const handleEditAvatarClick = () => {
     setIsEditAvatarPopupOpen(true);
@@ -153,6 +163,15 @@ function App() {
     setIsSubmit(true);
   };
 
+  const handleBurgerClick = (e) => {
+    if (isMenu) {
+      e.target.classList.remove("app-header__menu-opener_close");
+      return setIsMenu(false);
+    }
+    e.target.classList.add("app-header__menu-opener_close");
+    setIsMenu(true);
+  };
+
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <Routes>
@@ -163,21 +182,45 @@ function App() {
               loggedIn={loggedIn}
               component={
                 <>
+                  {isMenu && isMobile && (
+                    <div className="app-header__mobile-menu">
+                      <span className="app-header__email">{email}</span>
+                      <NavLink
+                        to="/sign-in"
+                        onClick={() => {
+                          setLoggedIn(false);
+                          localStorage.removeItem("token");
+                        }}
+                        className="app-header__exit button-hover"
+                      >
+                        Выйти
+                      </NavLink>
+                    </div>
+                  )}
                   <Header
                     headerRightElement={
-                      <div className="app-header__right-element">
-                        <span className="app-header__email">{email}</span>
-                        <NavLink
-                          to="/sign-in"
-                          onClick={() => {
-                            setLoggedIn(false);
-                            localStorage.removeItem("token");
-                          }}
-                          className="app-header__exit"
-                        >
-                          Выйти
-                        </NavLink>
-                      </div>
+                      <>
+                        {isMobile ? (
+                          <button
+                            className="app-header__menu-opener button-hover"
+                            onClick={handleBurgerClick}
+                          ></button>
+                        ) : (
+                          <div className="app-header__right-element">
+                            <span className="app-header__email">{email}</span>
+                            <NavLink
+                              to="/sign-in"
+                              onClick={() => {
+                                setLoggedIn(false);
+                                localStorage.removeItem("token");
+                              }}
+                              className="app-header__exit button-hover"
+                            >
+                              Выйти
+                            </NavLink>
+                          </div>
+                        )}
+                      </>
                     }
                   />
                   <Main

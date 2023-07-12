@@ -10,3 +10,27 @@
 .app-header__exit {
   color: #a9a9a9;
 }
+
+.app-header__menu-opener {
+  margin: 0 30px 31px 0;
+  background-image: url(../../images/burger-menu.svg);
+  background-size: cover;
+  cursor: pointer;
+  border: 0;
+  background-color: transparent;
+  width: 24px;
+  height: 23px;
+  padding: 0;
+}
+
+.app-header__menu-opener_close {
+  background-image: url(../../images/close-icon.svg);
+}
+
+.app-header__mobile-menu {
+  display: flex;
+  flex-direction: column;
+  row-gap: 18px;
+  margin: 40px 0;
+  text-align: center;
+}

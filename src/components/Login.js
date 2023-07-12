@@ -8,7 +8,7 @@ export default function Login({ setLoggedIn, setToken }) {
     <>
       <Header
         headerRightElement={
-          <NavLink to="/sign-up" className="header__link">
+          <NavLink to="/sign-up" className="header__link button-hover">
             Регистрация
           </NavLink>
         }

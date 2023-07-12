@@ -14,7 +14,7 @@ export default function InfoTooltip({ onSubmit, setOnSubmit }) {
           setOnSubmit(undefined);
       }}
     >
-      <button className="popup__close popup__close_place_forms"></button>
+      <button className="popup__close popup__close_place_forms button-hover"></button>
       <div className="popup__container info-tooltip__container">
         <img
           src={onSubmit === "success" ? successImage : errorImage}

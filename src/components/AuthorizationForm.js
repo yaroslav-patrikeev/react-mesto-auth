@@ -43,15 +43,7 @@ export default function AuthorizationForm({
       apiAuth
         .registration({ registerData, setOnSubmit })
         .then(() => {
-          apiAuth
-            .authorization(registerData)
-            .then((data) => {
-              setLoggedIn(true);
-              setToken(data.token);
-              navigate("/");
-              localStorage.setItem("token", data.token);
-            })
-            .catch(console.error);
+          navigate("/sign-in");
         })
         .catch((err) => {
           console.log(err);
@@ -87,7 +79,7 @@ export default function AuthorizationForm({
         placeholder="Пароль"
         onChange={handleEdit}
       ></input>
-      <button type="submit" className="authorization-form__button">
+      <button type="submit" className="authorization-form__button button-hover">
         {buttonText}
       </button>
       {returnLink}

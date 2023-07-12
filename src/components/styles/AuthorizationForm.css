@@ -39,6 +39,7 @@
 .authorization-form__button {
   height: 50px;
   margin-top: 186px;
+  cursor: pointer;
 }
 
 @media (max-width: 768px) {

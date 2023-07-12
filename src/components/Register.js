@@ -4,12 +4,12 @@ import AuthorizationForm from "./AuthorizationForm";
 import { NavLink } from "react-router-dom";
 import React from "react";
 
-export default function Register({ setOnSubmit }) {
+export default function Register({ setOnSubmit, setLoggedIn }) {
   return (
     <>
       <Header
         headerRightElement={
-          <NavLink to="/sign-in" className="header__link">
+          <NavLink to="/sign-in" className="header__link button-hover">
             Войти
           </NavLink>
         }
@@ -19,7 +19,10 @@ export default function Register({ setOnSubmit }) {
         title={"Регистрация"}
         buttonText={"Зарегистрироваться"}
         returnLink={
-          <NavLink to="/sign-in" className="authorization-form__return-link">
+          <NavLink
+            to="/sign-in"
+            className="authorization-form__return-link button-hover"
+          >
             Уже зарегистрированы? Войти
           </NavLink>
         }

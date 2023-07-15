@@ -1,19 +1,12 @@
 import "./styles/InfoTooltip.css";
 import successImage from "../images/success.svg";
 import errorImage from "../images/error.svg";
+import { usePopupClose } from "../hooks/usePopupClose";
 
-export default function InfoTooltip({ onSubmit, setOnSubmit }) {
+export default function InfoTooltip({ onSubmit, isOpen, onClose }) {
+  usePopupClose(isOpen, onClose);
   return (
-    <section
-      className={`popup ${onSubmit && "popup_opened"}`}
-      onClick={(evt) => {
-        if (
-          evt.target.classList.contains("popup_opened") ||
-          evt.target.classList.contains("popup__close")
-        )
-          setOnSubmit(undefined);
-      }}
-    >
+    <section className={`popup ${onSubmit && "popup_opened"}`}>
       <button className="popup__close popup__close_place_forms button-hover"></button>
       <div className="popup__container info-tooltip__container">
         <img

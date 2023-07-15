@@ -1,4 +1,5 @@
 import React from "react";
+import { useEffect } from "react";
 import Header from "./Header";
 import Main from "./Main";
 import Footer from "./Footer";
@@ -28,24 +29,24 @@ function App() {
   const [selectedCard, setSelectedCard] = React.useState({});
   const [currentUser, setCurrentUser] = React.useState({});
   const [cards, setCards] = React.useState([]);
-  const [isSubmit, setIsSubmit] = React.useState(false);
+  const [isLoading, setisLoading] = React.useState(false);
   const [activeCard, setActiveCard] = React.useState({});
   const [token, setToken] = React.useState(localStorage.getItem("token"));
   const [email, setEmail] = React.useState("");
   const [loggedIn, setLoggedIn] = React.useState(false);
   const [onSubmit, setOnSubmit] = React.useState(undefined);
   const navigate = useNavigate();
-  const apiAuth = new ApiAuth();
   const [isMobile, setIsMobile] = React.useState(false);
   const [isMenu, setIsMenu] = React.useState(false);
+  const isOpen =
+    isEditAvatarPopupOpen ||
+    isAddPlacePopupOpen ||
+    isConfirmDeletePopupOpen ||
+    isEditProfilePopupOpen ||
+    selectedCard.link ||
+    onSubmit;
 
-  React.useEffect(() => {
-    window.addEventListener("resize", () => {
-      if (window.innerWidth < 768) return setIsMobile(true);
-      setIsMenu(false);
-      setIsMobile(false);
-    });
-
+  useEffect(() => {
     api
       .getUserInfo()
       .then((res) => setCurrentUser(res))
@@ -56,10 +57,9 @@ function App() {
       .catch(console.error);
   }, []);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (token === null) return;
-    apiAuth
-      .checkToken(token)
+    ApiAuth.checkToken(token)
       .then((res) => {
         setEmail(res.data.email);
         setLoggedIn(true);
@@ -68,7 +68,19 @@ function App() {
       .catch(console.error);
   }, [token]);
 
-  React.useEffect(() => {});
+  useEffect(() => {
+    window.innerWidth < 768 && setIsMobile(true);
+    const resize = () => {
+      if (window.innerWidth < 768) return setIsMobile(true);
+      setIsMenu(false);
+      setIsMobile(false);
+    };
+    window.addEventListener("resize", resize);
+
+    return () => {
+      window.removeEventListener("resize", resize);
+    };
+  }, []);
 
   const handleEditAvatarClick = () => {
     setIsEditAvatarPopupOpen(true);
@@ -84,21 +96,6 @@ function App() {
         );
       })
       .catch(console.error);
-  };
-
-  const handleCardDelete = (evt) => {
-    evt.preventDefault();
-    api
-      .deleteCard(activeCard._id)
-      .then(() => {
-        setCards((state) => state.filter((c) => c._id !== activeCard._id));
-        handleCloseAllPopups();
-      })
-      .catch(console.error)
-      .finally(() => {
-        setIsSubmit(false);
-      });
-    setIsSubmit(true);
   };
 
   const handleClickCardBin = (card) => {
@@ -120,56 +117,50 @@ function App() {
     setIsAddPlacePopupOpen(false);
     setIsConfirmDeletePopupOpen(false);
     setSelectedCard({});
+    setOnSubmit(undefined);
+  };
+
+  const handleSubmit = (request) => {
+    setisLoading(true);
+    request()
+      .then(handleCloseAllPopups)
+      .catch(console.error)
+      .finally(() => setisLoading(false));
+  };
+
+  const handleCardDelete = (evt) => {
+    evt.preventDefault();
+
+    function makeRequest() {
+      return api
+        .deleteCard(activeCard._id)
+        .then(() =>
+          setCards((state) => state.filter((c) => c._id !== activeCard._id))
+        );
+    }
+    handleSubmit(makeRequest);
   };
 
   const handleUpdateUser = ({ name, about }) => {
-    api
-      .changeUserInfo(name, about)
-      .then((res) => {
-        setCurrentUser(res);
-        handleCloseAllPopups();
-      })
-      .catch(console.error)
-      .finally(() => {
-        setIsSubmit(false);
-      });
-    setIsSubmit(true);
+    function makeRequest() {
+      return api.changeUserInfo(name, about).then((res) => setCurrentUser(res));
+    }
+    handleSubmit(makeRequest);
   };
   const handleUpdateAvatar = ({ avatar }) => {
-    api
-      .changeUserAvatar(avatar)
-      .then((res) => {
-        setCurrentUser(res);
-        handleCloseAllPopups();
-      })
-      .catch(console.error)
-      .finally(() => {
-        setIsSubmit(false);
-      });
-    setIsSubmit(true);
+    function makeRequest() {
+      return api.changeUserAvatar(avatar).then((res) => setCurrentUser(res));
+    }
+    handleSubmit(makeRequest);
   };
 
   const handleAddPlace = ({ title, link }) => {
-    api
-      .addNewCard(title, link)
-      .then((res) => {
-        setCards([res, ...cards]);
-        handleCloseAllPopups();
-      })
-      .catch(console.error)
-      .finally(() => {
-        setIsSubmit(false);
-      });
-    setIsSubmit(true);
-  };
-
-  const handleBurgerClick = (e) => {
-    if (isMenu) {
-      e.target.classList.remove("app-header__menu-opener_close");
-      return setIsMenu(false);
+    function makeRequest() {
+      return api
+        .addNewCard(title, link)
+        .then((res) => setCards([res, ...cards]));
     }
-    e.target.classList.add("app-header__menu-opener_close");
-    setIsMenu(true);
+    handleSubmit(makeRequest);
   };
 
   return (
@@ -182,45 +173,36 @@ function App() {
               loggedIn={loggedIn}
               component={
                 <>
-                  {isMenu && isMobile && (
-                    <div className="app-header__mobile-menu">
-                      <span className="app-header__email">{email}</span>
-                      <NavLink
-                        to="/sign-in"
-                        onClick={() => {
-                          setLoggedIn(false);
-                          localStorage.removeItem("token");
-                        }}
-                        className="app-header__exit button-hover"
-                      >
-                        Выйти
-                      </NavLink>
-                    </div>
-                  )}
                   <Header
+                    isMenu={isMenu}
+                    isMobile={isMobile}
+                    email={email}
+                    setLoggedIn={setLoggedIn}
                     headerRightElement={
-                      <>
-                        {isMobile ? (
-                          <button
-                            className="app-header__menu-opener button-hover"
-                            onClick={handleBurgerClick}
-                          ></button>
-                        ) : (
-                          <div className="app-header__right-element">
-                            <span className="app-header__email">{email}</span>
-                            <NavLink
-                              to="/sign-in"
-                              onClick={() => {
-                                setLoggedIn(false);
-                                localStorage.removeItem("token");
-                              }}
-                              className="app-header__exit button-hover"
-                            >
-                              Выйти
-                            </NavLink>
-                          </div>
-                        )}
-                      </>
+                      isMobile ? (
+                        <button
+                          className={`app-header__menu-opener button-hover ${
+                            isMenu && "app-header__menu-opener_close"
+                          }`}
+                          onClick={() => {
+                            isMenu ? setIsMenu(false) : setIsMenu(true);
+                          }}
+                        ></button>
+                      ) : (
+                        <div className="app-header__right-element">
+                          <span className="app-header__email">{email}</span>
+                          <NavLink
+                            to="/sign-in"
+                            onClick={() => {
+                              setLoggedIn(false);
+                              localStorage.removeItem("token");
+                            }}
+                            className="app-header__exit button-hover"
+                          >
+                            Выйти
+                          </NavLink>
+                        </div>
+                      )
                     }
                   />
                   <Main
@@ -237,19 +219,19 @@ function App() {
                     isOpen={isEditAvatarPopupOpen}
                     onClose={handleCloseAllPopups}
                     onUpdateAvatar={handleUpdateAvatar}
-                    buttonText={isSubmit ? "Сохранение..." : "Сохранить"}
+                    buttonText={isLoading ? "Сохранение..." : "Сохранить"}
                   />
                   <EditProfilePopup
                     isOpen={isEditProfilePopupOpen}
                     onClose={handleCloseAllPopups}
                     onUpdateUser={handleUpdateUser}
-                    buttonText={isSubmit ? "Сохранение..." : "Сохранить"}
+                    buttonText={isLoading ? "Сохранение..." : "Сохранить"}
                   />
                   <AddPlacePopup
                     isOpen={isAddPlacePopupOpen}
                     onClose={handleCloseAllPopups}
                     onAddPlace={handleAddPlace}
-                    buttonText={isSubmit ? "Создание..." : "Создать"}
+                    buttonText={isLoading ? "Создание..." : "Создать"}
                   />
                   <PopupWithForm
                     title="Вы уверены?"
@@ -257,7 +239,7 @@ function App() {
                     isOpen={isConfirmDeletePopupOpen}
                     onClose={handleCloseAllPopups}
                     isValid={true}
-                    buttonText={isSubmit ? "Удаление..." : "Да"}
+                    buttonText={isLoading ? "Удаление..." : "Да"}
                     onSubmit={handleCardDelete}
                   />
                   <ImagePopup
@@ -278,7 +260,12 @@ function App() {
           element={<Register setOnSubmit={setOnSubmit} />}
         />
       </Routes>
-      <InfoTooltip onSubmit={onSubmit} setOnSubmit={setOnSubmit} />
+      <InfoTooltip
+        onSubmit={onSubmit}
+        setOnSubmit={setOnSubmit}
+        isOpen={isOpen}
+        onClose={handleCloseAllPopups}
+      />
     </CurrentUserContext.Provider>
   );
 }

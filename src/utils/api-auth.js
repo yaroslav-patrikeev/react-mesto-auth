@@ -1,4 +1,4 @@
-export default class ApiAuth {
+class ApiAuth {
   constructor() {
     this._BASE_URL = "https://auth.nomoreparties.co";
   }
@@ -10,33 +10,39 @@ export default class ApiAuth {
     return res.json();
   }
 
-  registration({ registerData, setOnSubmit }) {
-    return fetch(`${this._BASE_URL}/signup`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(registerData),
-    })
-      .then(this._getResponseData)
-      .then(() => {
-        setOnSubmit("success");
-      });
+  _request(endpoint, options) {
+    return fetch(this._BASE_URL + endpoint, options).then(
+      this._getResponseData
+    );
   }
 
-  authorization(authorizationData) {
-    return fetch(`${this._BASE_URL}/signin`, {
+  registration({ values, setOnSubmit }) {
+    return this._request("/signup", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(authorizationData),
-    }).then(this._getResponseData);
+      body: JSON.stringify(values),
+    }).then(() => {
+      setOnSubmit("success");
+    });
+  }
+
+  authorization(values) {
+    return this._request("/signin", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(values),
+    });
   }
 
   checkToken(token) {
-    return fetch(`${this._BASE_URL}/users/me`, {
+    return this._request("/users/me", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
-    }).then(this._getResponseData);
+    });
   }
 }
+
+export default ApiAuth = new ApiAuth();

@@ -1,17 +1,12 @@
+import { usePopupClose } from "../hooks/usePopupClose";
+
 export default function ImagePopup({ card, onClose }) {
+  usePopupClose(card?.link, onClose);
   return (
     <section
       className={`popup popup_image ${
         JSON.stringify(card) !== "{}" && "popup_opened"
       }`}
-      onClick={(evt) => {
-        if (
-          evt.target.classList.contains("popup_opened") ||
-          evt.target.classList.contains("popup__close")
-        ) {
-          return onClose();
-        }
-      }}
     >
       <div className="popup__image-container">
         <button

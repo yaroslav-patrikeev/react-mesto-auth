@@ -1,4 +1,5 @@
 import React from "react";
+import { usePopupClose } from "../hooks/usePopupClose";
 
 export default function PopupWithForm({
   name,
@@ -10,18 +11,9 @@ export default function PopupWithForm({
   onSubmit,
   isValid,
 }) {
+  usePopupClose(isOpen, onClose);
   return (
-    <section
-      className={`popup popup_type_${name} ${isOpen && "popup_opened"}`}
-      onClick={(evt) => {
-        if (
-          evt.target.classList.contains("popup_opened") ||
-          evt.target.classList.contains("popup__close")
-        ) {
-          return onClose();
-        }
-      }}
-    >
+    <section className={`popup popup_type_${name} ${isOpen && "popup_opened"}`}>
       <form
         name={name}
         className="popup__container"

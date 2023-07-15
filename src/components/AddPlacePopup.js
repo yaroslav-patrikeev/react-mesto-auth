@@ -1,39 +1,26 @@
-import React from "react";
+import React, { useEffect } from "react";
 import PopupWithForm from "./PopupWithForm";
+import { useFormAndValidation } from "../hooks/useFormAndValidation";
 export default function AddPlacePopup({
   isOpen,
   onClose,
   onAddPlace,
   buttonText,
 }) {
-  const titleRef = React.useRef();
-  const linkRef = React.useRef();
+  const { values, handleChange, errors, isValid, setValues, resetForm } =
+    useFormAndValidation();
+  useEffect(() => {
+    resetForm();
+  }, [isOpen]);
   const handleAddPlaceSubmit = (evt) => {
     evt.preventDefault();
-    onAddPlace({ title: titleRef.current.value, link: linkRef.current.value });
+    onAddPlace({ title: values["title"], link: values["link"] });
   };
-  const [titleError, setTitleError] = React.useState("");
-  const [linkError, setLinkError] = React.useState("");
-  const [isValid, setIsValid] = React.useState(false);
-  const changeIsValid = () => {
-    if (titleRef.current.validity.valid && linkRef.current.validity.valid)
-      setIsValid(true);
-    else setIsValid(false);
+  const handleInputChange = (evt) => {
+    const { name, value } = evt.target;
+    setValues({ ...values, [name]: value });
+    handleChange(evt);
   };
-  const handleInputTitleChange = () => {
-    setTitleError(titleRef.current.validationMessage);
-    changeIsValid();
-  };
-  const handleInputLinkChange = () => {
-    setLinkError(linkRef.current.validationMessage);
-    changeIsValid();
-  };
-
-  React.useEffect(() => {
-    titleRef.current.value = "";
-    linkRef.current.value = "";
-    setIsValid(false);
-  }, [isOpen]);
 
   return (
     <PopupWithForm
@@ -47,41 +34,41 @@ export default function AddPlacePopup({
     >
       <input
         type="text"
+        name="title"
         id="input-title"
         className={`popup__input popup__input_field_first ${
-          titleError !== "" && "popup__input_type_error"
+          errors["title"] && "popup__input_type_error"
         }`}
         minLength="2"
         maxLength="30"
         placeholder="Название"
-        ref={titleRef}
-        onInput={handleInputTitleChange}
+        onInput={handleInputChange}
+        value={values["title"] || ""}
         required
       />
       <span
         id="input-title-error"
-        className={`popup__error ${
-          titleError !== "" && "popup__error_visible"
-        }`}
+        className={`popup__error ${errors["title"] && "popup__error_visible"}`}
       >
-        {titleError}
+        {errors["title"]}
       </span>
       <input
         type="url"
+        name="link"
         id="input-link"
         className={`popup__input popup__input_field_second ${
-          linkError !== "" && "popup__input_type_error"
+          errors["link"] && "popup__input_type_error"
         }`}
         placeholder="Ссылка на картинку"
-        ref={linkRef}
-        onInput={handleInputLinkChange}
+        onInput={handleInputChange}
+        value={values["link"] || ""}
         required
       />
       <span
         id="input-link-error"
-        className={`popup__error ${linkError !== "" && "popup__error_visible"}`}
+        className={`popup__error ${errors["link"] && "popup__error_visible"}`}
       >
-        {linkError}
+        {errors["link"]}
       </span>
     </PopupWithForm>
   );

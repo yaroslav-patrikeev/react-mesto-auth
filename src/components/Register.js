@@ -4,7 +4,7 @@ import AuthorizationForm from "./AuthorizationForm";
 import { NavLink } from "react-router-dom";
 import React from "react";
 
-export default function Register({ setOnSubmit, setLoggedIn }) {
+export default function Register({ setOnSubmit }) {
   return (
     <>
       <Header
